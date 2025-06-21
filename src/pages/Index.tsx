@@ -13,6 +13,8 @@ import MarketNews from '@/components/MarketNews';
 import GameEvents from '@/components/GameEvents';
 import PlayerLevel from '@/components/PlayerLevel';
 import Achievements from '@/components/Achievements';
+import AudioManager from '@/components/AudioManager';
+import Settings from '@/components/Settings';
 import type { Achievement } from '@/components/Achievements';
 
 export interface Meme {
@@ -50,16 +52,30 @@ const Index = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [playerLevel, setPlayerLevel] = useState(1);
   const [playerExperience, setPlayerExperience] = useState(0);
-  
+  const [showSettings, setShowSettings] = useState(false);
+
+  // Game settings state
+  const [gameSettings, setGameSettings] = useState({
+    language: 'en',
+    darkMode: false,
+    musicEnabled: true,
+    soundEffectsEnabled: true,
+    musicVolume: 70,
+    sfxVolume: 80,
+    colorTheme: 'rainbow',
+    notifications: true,
+    autoSave: true
+  });
+
   const [memes, setMemes] = useState<Meme[]>([
     {
       id: '1',
       name: 'Doge Classic',
       symbol: 'DOGE',
-      currentPrice: 0.25,
-      priceHistory: [0.20, 0.22, 0.18, 0.25, 0.23, 0.25],
+      currentPrice: 2.50,
+      priceHistory: [2.20, 2.35, 2.10, 2.50, 2.40, 2.50],
       change24h: 12.5,
-      marketCap: 35000000,
+      marketCap: 350000000,
       emoji: '🐕',
       color: '#F59E0B',
       category: 'Animal Memes'
@@ -68,10 +84,10 @@ const Index = () => {
       id: '2',
       name: 'Pepe Premium',
       symbol: 'PEPE',
-      currentPrice: 0.0015,
-      priceHistory: [0.001, 0.0012, 0.0018, 0.0015, 0.0016, 0.0015],
+      currentPrice: 1.85,
+      priceHistory: [1.50, 1.65, 1.90, 1.85, 1.88, 1.85],
       change24h: -8.3,
-      marketCap: 25000000,
+      marketCap: 280000000,
       emoji: '🐸',
       color: '#10B981',
       category: 'Classic Memes'
@@ -80,10 +96,10 @@ const Index = () => {
       id: '3',
       name: 'Wojak Wisdom',
       symbol: 'WOJ',
-      currentPrice: 0.045,
-      priceHistory: [0.03, 0.035, 0.04, 0.045, 0.042, 0.045],
+      currentPrice: 3.45,
+      priceHistory: [2.80, 3.10, 3.25, 3.45, 3.30, 3.45],
       change24h: 15.8,
-      marketCap: 18000000,
+      marketCap: 195000000,
       emoji: '😭',
       color: '#8B5CF6',
       category: 'Reaction Memes'
@@ -92,10 +108,10 @@ const Index = () => {
       id: '4',
       name: 'Chad Coin',
       symbol: 'CHAD',
-      currentPrice: 0.12,
-      priceHistory: [0.1, 0.11, 0.115, 0.12, 0.118, 0.12],
+      currentPrice: 4.20,
+      priceHistory: [3.80, 4.05, 4.15, 4.20, 4.10, 4.20],
       change24h: 7.2,
-      marketCap: 42000000,
+      marketCap: 465000000,
       emoji: '💪',
       color: '#EF4444',
       category: 'Viral Characters'
@@ -104,10 +120,10 @@ const Index = () => {
       id: '5',
       name: 'Stonks Supreme',
       symbol: 'STONK',
-      currentPrice: 0.089,
-      priceHistory: [0.075, 0.08, 0.085, 0.089, 0.087, 0.089],
+      currentPrice: 5.89,
+      priceHistory: [5.25, 5.45, 5.70, 5.89, 5.75, 5.89],
       change24h: 9.4,
-      marketCap: 28000000,
+      marketCap: 315000000,
       emoji: '📈',
       color: '#06B6D4',
       category: 'Finance Memes'
@@ -116,10 +132,10 @@ const Index = () => {
       id: '6',
       name: 'Distracted Drake',
       symbol: 'DRAKE',
-      currentPrice: 0.067,
-      priceHistory: [0.055, 0.058, 0.063, 0.067, 0.065, 0.067],
+      currentPrice: 3.67,
+      priceHistory: [3.15, 3.35, 3.55, 3.67, 3.60, 3.67],
       change24h: 18.2,
-      marketCap: 31000000,
+      marketCap: 385000000,
       emoji: '🦆',
       color: '#F97316',
       category: 'Choice Memes'
@@ -128,10 +144,10 @@ const Index = () => {
       id: '7',
       name: 'Galaxy Brain',
       symbol: 'BRAIN',
-      currentPrice: 0.034,
-      priceHistory: [0.028, 0.031, 0.032, 0.034, 0.033, 0.034],
+      currentPrice: 7.34,
+      priceHistory: [6.20, 6.75, 7.10, 7.34, 7.15, 7.34],
       change24h: 21.4,
-      marketCap: 19500000,
+      marketCap: 425000000,
       emoji: '🧠',
       color: '#EC4899',
       category: 'Intellectual Memes'
@@ -140,10 +156,10 @@ const Index = () => {
       id: '8',
       name: 'This is Fine',
       symbol: 'FINE',
-      currentPrice: 0.078,
-      priceHistory: [0.065, 0.070, 0.075, 0.078, 0.076, 0.078],
+      currentPrice: 2.78,
+      priceHistory: [2.35, 2.50, 2.65, 2.78, 2.70, 2.78],
       change24h: 20.0,
-      marketCap: 22800000,
+      marketCap: 295000000,
       emoji: '🔥',
       color: '#DC2626',
       category: 'Situation Memes'
@@ -152,10 +168,10 @@ const Index = () => {
       id: '9',
       name: 'Grumpy Cat',
       symbol: 'GRUMP',
-      currentPrice: 0.156,
-      priceHistory: [0.130, 0.140, 0.150, 0.156, 0.152, 0.156],
+      currentPrice: 6.56,
+      priceHistory: [5.80, 6.10, 6.35, 6.56, 6.45, 6.56],
       change24h: 20.0,
-      marketCap: 38400000,
+      marketCap: 445000000,
       emoji: '😾',
       color: '#7C3AED',
       category: 'Animal Memes'
@@ -164,10 +180,10 @@ const Index = () => {
       id: '10',
       name: 'Success Kid',
       symbol: 'SUCCESS',
-      currentPrice: 0.092,
-      priceHistory: [0.076, 0.082, 0.088, 0.092, 0.090, 0.092],
+      currentPrice: 4.92,
+      priceHistory: [4.20, 4.45, 4.70, 4.92, 4.85, 4.92],
       change24h: 21.1,
-      marketCap: 26400000,
+      marketCap: 365000000,
       emoji: '👶',
       color: '#059669',
       category: 'Success Memes'
@@ -176,10 +192,10 @@ const Index = () => {
       id: '11',
       name: 'Roll Safe',
       symbol: 'SAFE',
-      currentPrice: 0.041,
-      priceHistory: [0.034, 0.037, 0.039, 0.041, 0.040, 0.041],
+      currentPrice: 3.41,
+      priceHistory: [2.90, 3.05, 3.25, 3.41, 3.35, 3.41],
       change24h: 20.6,
-      marketCap: 17220000,
+      marketCap: 275000000,
       emoji: '🤔',
       color: '#0891B2',
       category: 'Think Memes'
@@ -188,10 +204,10 @@ const Index = () => {
       id: '12',
       name: 'Woman Yelling at Cat',
       symbol: 'YELL',
-      currentPrice: 0.063,
-      priceHistory: [0.052, 0.056, 0.060, 0.063, 0.061, 0.063],
+      currentPrice: 5.63,
+      priceHistory: [4.80, 5.10, 5.35, 5.63, 5.50, 5.63],
       change24h: 21.2,
-      marketCap: 20790000,
+      marketCap: 395000000,
       emoji: '😤',
       color: '#BE185D',
       category: 'Reaction Memes'
@@ -404,6 +420,11 @@ const Index = () => {
 
     const cost = meme.currentPrice * amount;
     if (portfolio.cash >= cost) {
+      // Play buy sound
+      if ((window as any).playGameSound) {
+        (window as any).playGameSound('buy', 0.6);
+      }
+      
       setPortfolio(prev => ({
         ...prev,
         cash: prev.cash - cost,
@@ -431,6 +452,9 @@ const Index = () => {
         const completed = newProgress >= achievement.target && !achievement.completed;
         if (completed) {
           setPortfolio(p => ({ ...p, cash: p.cash + achievement.reward }));
+          if ((window as any).playGameSound) {
+            (window as any).playGameSound('achievement', 0.8);
+          }
         }
         
         return {
@@ -439,12 +463,22 @@ const Index = () => {
           completed: completed || achievement.completed
         };
       }));
+    } else {
+      // Play error sound for insufficient funds
+      if ((window as any).playGameSound) {
+        (window as any).playGameSound('error', 0.4);
+      }
     }
   };
 
   const sellMeme = (memeId: string, amount: number) => {
     const meme = memes.find(m => m.id === memeId);
     if (!meme || !portfolio.holdings[memeId] || portfolio.holdings[memeId] < amount) return;
+
+    // Play sell sound
+    if ((window as any).playGameSound) {
+      (window as any).playGameSound('sell', 0.6);
+    }
 
     const revenue = meme.currentPrice * amount;
     setPortfolio(prev => ({
@@ -465,6 +499,9 @@ const Index = () => {
         const completed = newProgress >= achievement.target && !achievement.completed;
         if (completed) {
           setPortfolio(p => ({ ...p, cash: p.cash + achievement.reward }));
+          if ((window as any).playGameSound) {
+            (window as any).playGameSound('achievement', 0.8);
+          }
         }
         return {
           ...achievement,
@@ -478,7 +515,17 @@ const Index = () => {
 
   const buyUpgrade = (upgradeId: string) => {
     const upgrade = upgrades.find(u => u.id === upgradeId);
-    if (!upgrade || upgrade.level >= upgrade.maxLevel || portfolio.cash < upgrade.cost) return;
+    if (!upgrade || upgrade.level >= upgrade.maxLevel || portfolio.cash < upgrade.cost) {
+      if ((window as any).playGameSound) {
+        (window as any).playGameSound('error', 0.4);
+      }
+      return;
+    }
+
+    // Play upgrade sound
+    if ((window as any).playGameSound) {
+      (window as any).playGameSound('upgrade', 0.7);
+    }
 
     setPortfolio(prev => ({ ...prev, cash: prev.cash - upgrade.cost }));
     setUpgrades(prev => 
@@ -496,6 +543,9 @@ const Index = () => {
         const completed = totalUpgrades >= achievement.target && !achievement.completed;
         if (completed) {
           setPortfolio(p => ({ ...p, cash: p.cash + achievement.reward }));
+          if ((window as any).playGameSound) {
+            (window as any).playGameSound('achievement', 0.8);
+          }
         }
         return {
           ...achievement,
@@ -509,9 +559,11 @@ const Index = () => {
 
   const handleEventAction = (eventId: string, action: 'accept' | 'dismiss') => {
     if (action === 'accept') {
-      // Handle event rewards/effects here
+      // Play notification sound
+      if ((window as any).playGameSound) {
+        (window as any).playGameSound('notification', 0.5);
+      }
       console.log(`Event ${eventId} accepted`);
-      // You could add specific event handling logic here
     }
   };
 
@@ -531,17 +583,46 @@ const Index = () => {
     return <WelcomeScreen onStartGame={() => setGameStarted(true)} />;
   }
 
+  const backgroundClass = gameSettings.darkMode 
+    ? "min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-800"
+    : gameSettings.colorTheme === 'rainbow'
+    ? "min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 via-blue-200 via-green-200 to-yellow-200 animate-pulse"
+    : gameSettings.colorTheme === 'neon'
+    ? "min-h-screen bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500"
+    : gameSettings.colorTheme === 'pastel'
+    ? "min-h-screen bg-gradient-to-br from-pink-100 via-purple-50 to-cyan-100"
+    : gameSettings.colorTheme === 'retro'
+    ? "min-h-screen bg-gradient-to-br from-orange-300 via-red-300 to-pink-300"
+    : "min-h-screen bg-gradient-to-br from-purple-400 via-cyan-400 to-green-400";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-50 to-cyan-100">
+    <div className={backgroundClass}>
+      <AudioManager settings={gameSettings} />
+      
       <GameEvents 
         playerCash={portfolio.cash}
         playerLevel={level}
         onEventAction={handleEventAction}
       />
       
+      <Settings
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        settings={gameSettings}
+        onSettingsChange={setGameSettings}
+      />
+      
       <div className="container mx-auto px-4 py-6">
-        {/* Header */}
-        <div className="mb-8">
+        {/* Header with Settings Button */}
+        <div className="mb-8 relative">
+          <Button
+            onClick={() => setShowSettings(true)}
+            className="absolute top-0 right-0 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold border-2 border-white/30"
+            size="sm"
+          >
+            ⚙️ Settings
+          </Button>
+          
           <h1 className="text-4xl font-bold text-gray-900 mb-2 text-center animate-bounce">
             🚀 MemeStocks Exchange 🎮
           </h1>
