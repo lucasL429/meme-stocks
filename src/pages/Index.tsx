@@ -15,6 +15,7 @@ import PlayerLevel from '@/components/PlayerLevel';
 import Achievements from '@/components/Achievements';
 import AudioManager from '@/components/AudioManager';
 import Settings from '@/components/Settings';
+import Tutorial from '@/components/Tutorial';
 import type { Achievement } from '@/components/Achievements';
 
 export interface Meme {
@@ -53,6 +54,7 @@ const Index = () => {
   const [playerLevel, setPlayerLevel] = useState(1);
   const [playerExperience, setPlayerExperience] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   // Game settings state
   const [gameSettings, setGameSettings] = useState({
@@ -68,149 +70,161 @@ const Index = () => {
   });
 
   const [memes, setMemes] = useState<Meme[]>([
+    // Sports Memes (from TikTok data)
     {
       id: '1',
-      name: 'Doge Classic',
-      symbol: 'DOGE',
-      currentPrice: 2.50,
-      priceHistory: [2.20, 2.35, 2.10, 2.50, 2.40, 2.50],
-      change24h: 12.5,
-      marketCap: 350000000,
-      emoji: '🐕',
-      color: '#F59E0B',
-      category: 'Animal Memes'
+      name: 'TikTok Sports',
+      symbol: 'SPORT',
+      currentPrice: 8.78,
+      priceHistory: [7.20, 7.65, 8.10, 8.78, 8.45, 8.78],
+      change24h: 21.9,
+      marketCap: 450000000,
+      emoji: '⚽',
+      color: '#10B981',
+      category: 'Sports'
     },
+    // Relationship/Lifestyle Memes
     {
       id: '2',
-      name: 'Pepe Premium',
-      symbol: 'PEPE',
-      currentPrice: 1.85,
-      priceHistory: [1.50, 1.65, 1.90, 1.85, 1.88, 1.85],
-      change24h: -8.3,
-      marketCap: 280000000,
-      emoji: '🐸',
-      color: '#10B981',
-      category: 'Classic Memes'
+      name: 'Wedding Ice Bow',
+      symbol: 'WEDDING',
+      currentPrice: 20.74,
+      priceHistory: [18.50, 19.25, 20.10, 20.74, 20.30, 20.74],
+      change24h: 12.1,
+      marketCap: 620000000,
+      emoji: '💒',
+      color: '#EC4899',
+      category: 'Relationship/Lifestyle'
     },
+    // Trending/Generic Memes
     {
       id: '3',
-      name: 'Wojak Wisdom',
-      symbol: 'WOJ',
-      currentPrice: 3.45,
-      priceHistory: [2.80, 3.10, 3.25, 3.45, 3.30, 3.45],
-      change24h: 15.8,
-      marketCap: 195000000,
-      emoji: '😭',
+      name: 'Extrañare Sus Recuerdos',
+      symbol: 'EXTRA',
+      currentPrice: 19.59,
+      priceHistory: [16.80, 17.95, 18.65, 19.59, 19.15, 19.59],
+      change24h: 16.6,
+      marketCap: 580000000,
+      emoji: '😢',
       color: '#8B5CF6',
-      category: 'Reaction Memes'
+      category: 'Trending/Generic'
     },
+    // Comedy Memes
     {
       id: '4',
-      name: 'Chad Coin',
-      symbol: 'CHAD',
-      currentPrice: 4.20,
-      priceHistory: [3.80, 4.05, 4.15, 4.20, 4.10, 4.20],
-      change24h: 7.2,
-      marketCap: 465000000,
-      emoji: '💪',
-      color: '#EF4444',
-      category: 'Viral Characters'
+      name: 'Fyp Fun',
+      symbol: 'FYP',
+      currentPrice: 52.5,
+      priceHistory: [45.20, 48.15, 50.35, 52.5, 51.80, 52.5],
+      change24h: 16.2,
+      marketCap: 1200000000,
+      emoji: '😂',
+      color: '#F59E0B',
+      category: 'Comedy'
     },
+    // More Relationship/Lifestyle
     {
       id: '5',
-      name: 'Stonks Supreme',
-      symbol: 'STONK',
-      currentPrice: 5.89,
-      priceHistory: [5.25, 5.45, 5.70, 5.89, 5.75, 5.89],
-      change24h: 9.4,
-      marketCap: 315000000,
-      emoji: '📈',
+      name: 'Cool Guys Vibes',
+      symbol: 'COOL',
+      currentPrice: 93.0,
+      priceHistory: [78.50, 84.25, 89.10, 93.0, 91.45, 93.0],
+      change24h: 18.5,
+      marketCap: 2100000000,
+      emoji: '😎',
       color: '#06B6D4',
-      category: 'Finance Memes'
+      category: 'Relationship/Lifestyle'
     },
+    // Trending Love Memes
     {
       id: '6',
-      name: 'Distracted Drake',
-      symbol: 'DRAKE',
-      currentPrice: 3.67,
-      priceHistory: [3.15, 3.35, 3.55, 3.67, 3.60, 3.67],
-      change24h: 18.2,
-      marketCap: 385000000,
-      emoji: '🦆',
+      name: 'Love You Puppy',
+      symbol: 'LOVE',
+      currentPrice: 190.0,
+      priceHistory: [165.30, 175.80, 185.20, 190.0, 187.90, 190.0],
+      change24h: 14.9,
+      marketCap: 4200000000,
+      emoji: '💕',
       color: '#F97316',
-      category: 'Choice Memes'
+      category: 'Trending/Generic'
     },
+    // Animal/Pet Content
     {
       id: '7',
-      name: 'Galaxy Brain',
-      symbol: 'BRAIN',
-      currentPrice: 7.34,
-      priceHistory: [6.20, 6.75, 7.10, 7.34, 7.15, 7.34],
-      change24h: 21.4,
-      marketCap: 425000000,
-      emoji: '🧠',
-      color: '#EC4899',
-      category: 'Intellectual Memes'
+      name: 'Cute Cat Dude',
+      symbol: 'CAT',
+      currentPrice: 270.0,
+      priceHistory: [235.60, 248.90, 262.15, 270.0, 266.80, 270.0],
+      change24h: 14.6,
+      marketCap: 5800000000,
+      emoji: '🐱',
+      color: '#EF4444',
+      category: 'Animal Memes'
     },
+    // Flowers/Nature Trending
     {
       id: '8',
-      name: 'This is Fine',
-      symbol: 'FINE',
-      currentPrice: 2.78,
-      priceHistory: [2.35, 2.50, 2.65, 2.78, 2.70, 2.78],
-      change24h: 20.0,
-      marketCap: 295000000,
-      emoji: '🔥',
+      name: 'Flowers Trend',
+      symbol: 'FLOWER',
+      currentPrice: 220.0,
+      priceHistory: [190.80, 202.50, 215.30, 220.0, 217.40, 220.0],
+      change24h: 15.3,
+      marketCap: 4900000000,
+      emoji: '🌸',
       color: '#DC2626',
-      category: 'Situation Memes'
+      category: 'Trending/Generic'
     },
+    // Animal Content Continued
     {
       id: '9',
-      name: 'Grumpy Cat',
-      symbol: 'GRUMP',
-      currentPrice: 6.56,
-      priceHistory: [5.80, 6.10, 6.35, 6.56, 6.45, 6.56],
-      change24h: 20.0,
-      marketCap: 445000000,
-      emoji: '😾',
+      name: 'Animal Planet',
+      symbol: 'ANIMAL',
+      currentPrice: 410.0,
+      priceHistory: [358.70, 378.45, 395.80, 410.0, 404.20, 410.0],
+      change24h: 14.3,
+      marketCap: 8500000000,
+      emoji: '🦁',
       color: '#7C3AED',
       category: 'Animal Memes'
     },
+    // TikTok Boys Trending
     {
       id: '10',
-      name: 'Success Kid',
-      symbol: 'SUCCESS',
-      currentPrice: 4.92,
-      priceHistory: [4.20, 4.45, 4.70, 4.92, 4.85, 4.92],
-      change24h: 21.1,
-      marketCap: 365000000,
-      emoji: '👶',
+      name: 'TikTok Boys',
+      symbol: 'BOYS',
+      currentPrice: 1370.0,
+      priceHistory: [1180.50, 1265.30, 1320.40, 1370.0, 1348.70, 1370.0],
+      change24h: 16.1,
+      marketCap: 12000000000,
+      emoji: '👦',
       color: '#059669',
-      category: 'Success Memes'
+      category: 'Trending/Generic'
     },
+    // Sports Content
     {
       id: '11',
-      name: 'Roll Safe',
-      symbol: 'SAFE',
-      currentPrice: 3.41,
-      priceHistory: [2.90, 3.05, 3.25, 3.41, 3.35, 3.41],
-      change24h: 20.6,
-      marketCap: 275000000,
-      emoji: '🤔',
+      name: 'Sports Highlights',
+      symbol: 'HIGHLIGHTS',
+      currentPrice: 170.0,
+      priceHistory: [148.90, 157.30, 164.85, 170.0, 167.55, 170.0],
+      change24h: 14.2,
+      marketCap: 3800000000,
+      emoji: '🏆',
       color: '#0891B2',
-      category: 'Think Memes'
+      category: 'Sports'
     },
+    // Viral Content
     {
       id: '12',
-      name: 'Woman Yelling at Cat',
-      symbol: 'YELL',
-      currentPrice: 5.63,
-      priceHistory: [4.80, 5.10, 5.35, 5.63, 5.50, 5.63],
-      change24h: 21.2,
-      marketCap: 395000000,
-      emoji: '😤',
+      name: 'Viral Video',
+      symbol: 'VIRAL',
+      currentPrice: 70.0,
+      priceHistory: [61.25, 65.40, 68.15, 70.0, 69.30, 70.0],
+      change24h: 14.3,
+      marketCap: 1600000000,
+      emoji: '🔥',
       color: '#BE185D',
-      category: 'Reaction Memes'
+      category: 'Trending/Generic'
     }
   ]);
 
@@ -580,20 +594,20 @@ const Index = () => {
   const { level, experience, experienceToNext } = calculateLevel(portfolio.totalValue);
 
   if (!gameStarted) {
-    return <WelcomeScreen onStartGame={() => setGameStarted(true)} />;
+    return <WelcomeScreen onStartGame={() => setGameStarted(true)} onShowTutorial={() => setShowTutorial(true)} />;
   }
 
   const backgroundClass = gameSettings.darkMode 
     ? "min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-800"
     : gameSettings.colorTheme === 'rainbow'
-    ? "min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 via-blue-200 via-green-200 to-yellow-200 animate-pulse"
+    ? "min-h-screen bg-gradient-to-br from-pink-300 via-purple-300 via-blue-300 via-green-300 via-yellow-300 to-red-300 animate-pulse"
     : gameSettings.colorTheme === 'neon'
     ? "min-h-screen bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500"
     : gameSettings.colorTheme === 'pastel'
-    ? "min-h-screen bg-gradient-to-br from-pink-100 via-purple-50 to-cyan-100"
+    ? "min-h-screen bg-gradient-to-br from-pink-200 via-purple-100 to-cyan-200"
     : gameSettings.colorTheme === 'retro'
-    ? "min-h-screen bg-gradient-to-br from-orange-300 via-red-300 to-pink-300"
-    : "min-h-screen bg-gradient-to-br from-purple-400 via-cyan-400 to-green-400";
+    ? "min-h-screen bg-gradient-to-br from-orange-400 via-red-400 to-pink-400"
+    : "min-h-screen bg-gradient-to-br from-purple-500 via-cyan-500 to-green-500";
 
   return (
     <div className={backgroundClass}>
@@ -610,6 +624,12 @@ const Index = () => {
         onClose={() => setShowSettings(false)}
         settings={gameSettings}
         onSettingsChange={setGameSettings}
+        onShowTutorial={() => setShowTutorial(true)}
+      />
+
+      <Tutorial
+        isOpen={showTutorial}
+        onClose={() => setShowTutorial(false)}
       />
       
       <div className="container mx-auto px-4 py-6">
@@ -623,11 +643,11 @@ const Index = () => {
             ⚙️ Settings
           </Button>
           
-          <h1 className="text-4xl font-bold text-gray-900 mb-2 text-center animate-bounce">
+          <h1 className="text-4xl font-bold text-white mb-2 text-center animate-bounce drop-shadow-2xl">
             🚀 MemeStocks Exchange 🎮
           </h1>
-          <p className="text-lg text-gray-600 text-center">
-            Trade the hottest memes and build your fortune! 🌟
+          <p className="text-lg text-white text-center font-bold drop-shadow-lg">
+            Trade viral TikTok memes and build your fortune! 🌟📱
           </p>
         </div>
 
