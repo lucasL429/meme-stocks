@@ -25,6 +25,7 @@ export interface Meme {
   marketCap: number;
   emoji: string;
   color: string;
+  category: string;
 }
 
 export interface PlayerUpgrade {
@@ -60,7 +61,8 @@ const Index = () => {
       change24h: 12.5,
       marketCap: 35000000,
       emoji: '🐕',
-      color: '#F59E0B'
+      color: '#F59E0B',
+      category: 'Animal Memes'
     },
     {
       id: '2',
@@ -71,7 +73,8 @@ const Index = () => {
       change24h: -8.3,
       marketCap: 25000000,
       emoji: '🐸',
-      color: '#10B981'
+      color: '#10B981',
+      category: 'Classic Memes'
     },
     {
       id: '3',
@@ -82,7 +85,8 @@ const Index = () => {
       change24h: 15.8,
       marketCap: 18000000,
       emoji: '😭',
-      color: '#8B5CF6'
+      color: '#8B5CF6',
+      category: 'Reaction Memes'
     },
     {
       id: '4',
@@ -93,7 +97,8 @@ const Index = () => {
       change24h: 7.2,
       marketCap: 42000000,
       emoji: '💪',
-      color: '#EF4444'
+      color: '#EF4444',
+      category: 'Viral Characters'
     },
     {
       id: '5',
@@ -104,7 +109,92 @@ const Index = () => {
       change24h: 9.4,
       marketCap: 28000000,
       emoji: '📈',
-      color: '#06B6D4'
+      color: '#06B6D4',
+      category: 'Finance Memes'
+    },
+    {
+      id: '6',
+      name: 'Distracted Drake',
+      symbol: 'DRAKE',
+      currentPrice: 0.067,
+      priceHistory: [0.055, 0.058, 0.063, 0.067, 0.065, 0.067],
+      change24h: 18.2,
+      marketCap: 31000000,
+      emoji: '🦆',
+      color: '#F97316',
+      category: 'Choice Memes'
+    },
+    {
+      id: '7',
+      name: 'Galaxy Brain',
+      symbol: 'BRAIN',
+      currentPrice: 0.034,
+      priceHistory: [0.028, 0.031, 0.032, 0.034, 0.033, 0.034],
+      change24h: 21.4,
+      marketCap: 19500000,
+      emoji: '🧠',
+      color: '#EC4899',
+      category: 'Intellectual Memes'
+    },
+    {
+      id: '8',
+      name: 'This is Fine',
+      symbol: 'FINE',
+      currentPrice: 0.078,
+      priceHistory: [0.065, 0.070, 0.075, 0.078, 0.076, 0.078],
+      change24h: 20.0,
+      marketCap: 22800000,
+      emoji: '🔥',
+      color: '#DC2626',
+      category: 'Situation Memes'
+    },
+    {
+      id: '9',
+      name: 'Grumpy Cat',
+      symbol: 'GRUMP',
+      currentPrice: 0.156,
+      priceHistory: [0.130, 0.140, 0.150, 0.156, 0.152, 0.156],
+      change24h: 20.0,
+      marketCap: 38400000,
+      emoji: '😾',
+      color: '#7C3AED',
+      category: 'Animal Memes'
+    },
+    {
+      id: '10',
+      name: 'Success Kid',
+      symbol: 'SUCCESS',
+      currentPrice: 0.092,
+      priceHistory: [0.076, 0.082, 0.088, 0.092, 0.090, 0.092],
+      change24h: 21.1,
+      marketCap: 26400000,
+      emoji: '👶',
+      color: '#059669',
+      category: 'Success Memes'
+    },
+    {
+      id: '11',
+      name: 'Roll Safe',
+      symbol: 'SAFE',
+      currentPrice: 0.041,
+      priceHistory: [0.034, 0.037, 0.039, 0.041, 0.040, 0.041],
+      change24h: 20.6,
+      marketCap: 17220000,
+      emoji: '🤔',
+      color: '#0891B2',
+      category: 'Think Memes'
+    },
+    {
+      id: '12',
+      name: 'Woman Yelling at Cat',
+      symbol: 'YELL',
+      currentPrice: 0.063,
+      priceHistory: [0.052, 0.056, 0.060, 0.063, 0.061, 0.063],
+      change24h: 21.2,
+      marketCap: 20790000,
+      emoji: '😤',
+      color: '#BE185D',
+      category: 'Reaction Memes'
     }
   ]);
 
@@ -442,7 +532,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-50 to-cyan-100">
       <GameEvents 
         playerCash={portfolio.cash}
         playerLevel={level}
@@ -452,11 +542,11 @@ const Index = () => {
       <div className="container mx-auto px-4 py-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2 text-center">
-            🚀 MemeStocks Exchange
+          <h1 className="text-4xl font-bold text-gray-900 mb-2 text-center animate-bounce">
+            🚀 MemeStocks Exchange 🎮
           </h1>
           <p className="text-lg text-gray-600 text-center">
-            Invest in the hottest memes and build your fortune!
+            Trade the hottest memes and build your fortune! 🌟
           </p>
         </div>
 
@@ -471,49 +561,49 @@ const Index = () => {
         </div>
 
         {/* Portfolio Summary */}
-        <Card className="mb-6 p-6 bg-gradient-to-r from-green-400 to-blue-500 text-white">
+        <Card className="mb-6 p-6 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white shadow-2xl border-4 border-yellow-300">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold">${portfolio.totalValue.toFixed(2)}</div>
-              <div className="text-green-100">Total Portfolio Value</div>
+            <div className="text-center bg-white/20 rounded-xl p-4 backdrop-blur-sm">
+              <div className="text-3xl font-bold text-yellow-200">${portfolio.totalValue.toFixed(2)}</div>
+              <div className="text-green-100 font-semibold">💰 Total Portfolio Value</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">${portfolio.cash.toFixed(2)}</div>
-              <div className="text-green-100">Available Cash</div>
+            <div className="text-center bg-white/20 rounded-xl p-4 backdrop-blur-sm">
+              <div className="text-3xl font-bold text-yellow-200">${portfolio.cash.toFixed(2)}</div>
+              <div className="text-green-100 font-semibold">🏦 Available Cash</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">#{portfolio.rank}</div>
-              <div className="text-green-100">Global Rank</div>
+            <div className="text-center bg-white/20 rounded-xl p-4 backdrop-blur-sm">
+              <div className="text-3xl font-bold text-yellow-200">#{portfolio.rank}</div>
+              <div className="text-green-100 font-semibold">🏆 Global Rank</div>
             </div>
           </div>
         </Card>
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="trading" className="w-full">
-          <TabsList className="grid w-full grid-cols-6 mb-6">
-            <TabsTrigger value="trading" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-6 mb-6 bg-gradient-to-r from-indigo-500 to-purple-600 p-2 rounded-2xl">
+            <TabsTrigger value="trading" className="flex items-center gap-2 text-white font-bold rounded-xl data-[state=active]:bg-white data-[state=active]:text-purple-600 transition-all">
               <TrendingUp className="w-4 h-4" />
-              Trading
+              🎯 Trading
             </TabsTrigger>
-            <TabsTrigger value="portfolio" className="flex items-center gap-2">
+            <TabsTrigger value="portfolio" className="flex items-center gap-2 text-white font-bold rounded-xl data-[state=active]:bg-white data-[state=active]:text-purple-600 transition-all">
               <Wallet className="w-4 h-4" />
-              Portfolio
+              💼 Portfolio
             </TabsTrigger>
-            <TabsTrigger value="upgrades" className="flex items-center gap-2">
+            <TabsTrigger value="upgrades" className="flex items-center gap-2 text-white font-bold rounded-xl data-[state=active]:bg-white data-[state=active]:text-purple-600 transition-all">
               <ShoppingCart className="w-4 h-4" />
-              Upgrades
+              🛒 Upgrades
             </TabsTrigger>
-            <TabsTrigger value="achievements" className="flex items-center gap-2">
+            <TabsTrigger value="achievements" className="flex items-center gap-2 text-white font-bold rounded-xl data-[state=active]:bg-white data-[state=active]:text-purple-600 transition-all">
               <Award className="w-4 h-4" />
-              Achievements
+              🏅 Achievements
             </TabsTrigger>
-            <TabsTrigger value="news" className="flex items-center gap-2">
+            <TabsTrigger value="news" className="flex items-center gap-2 text-white font-bold rounded-xl data-[state=active]:bg-white data-[state=active]:text-purple-600 transition-all">
               <Calendar className="w-4 h-4" />
-              News
+              📰 News
             </TabsTrigger>
-            <TabsTrigger value="leaderboard" className="flex items-center gap-2">
+            <TabsTrigger value="leaderboard" className="flex items-center gap-2 text-white font-bold rounded-xl data-[state=active]:bg-white data-[state=active]:text-purple-600 transition-all">
               <Trophy className="w-4 h-4" />
-              Leaderboard
+              🥇 Leaderboard
             </TabsTrigger>
           </TabsList>
 

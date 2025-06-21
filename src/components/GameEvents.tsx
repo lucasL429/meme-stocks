@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { X, Gift, TrendingUp, Zap } from 'lucide-react';
+import { X, Gift, TrendingUp, Zap, AlertTriangle } from 'lucide-react';
 
 export interface GameEvent {
   id: string;
   title: string;
   description: string;
-  type: 'bonus' | 'market_boost' | 'discount' | 'challenge';
+  type: 'bonus' | 'market_boost' | 'discount' | 'challenge' | 'crash' | 'surge';
   effect: string;
   duration?: number;
   reward?: number;
@@ -28,49 +28,112 @@ const GameEvents = ({ playerCash, playerLevel, onEventAction }: GameEventsProps)
   const generateEvent = (): GameEvent | null => {
     const events = [
       {
-        title: "🎉 Welcome Bonus",
-        description: "Start your journey with extra cash!",
+        title: "🎉 Rookie Trader Bonus",
+        description: "Welcome to the meme market! Here's some starter cash!",
         type: 'bonus' as const,
-        effect: "Receive $500 bonus",
+        effect: "Receive $500 bonus cash",
         reward: 500,
         icon: "🎁",
         trigger: () => playerCash < 15000 && playerLevel === 1
       },
       {
-        title: "⚡ Market Flash Sale",
-        description: "All trading fees reduced by 50%!",
+        title: "⚡ Speed Trading Hour",
+        description: "Lightning fast trades with zero fees!",
         type: 'discount' as const,
-        effect: "Reduced trading fees for 5 minutes",
+        effect: "No trading fees for 5 minutes",
         duration: 300000,
         icon: "💸",
-        trigger: () => Math.random() < 0.3
+        trigger: () => Math.random() < 0.25
       },
       {
-        title: "🚀 Meme Mania Hour",
-        description: "All meme prices fluctuate more rapidly!",
+        title: "🚀 Meme Mania Mode",
+        description: "All memes are going absolutely viral!",
         type: 'market_boost' as const,
-        effect: "Increased price volatility",
+        effect: "Massive price swings for 3 minutes",
         duration: 180000,
         icon: "📈",
         trigger: () => Math.random() < 0.2
       },
       {
         title: "💎 Diamond Hands Challenge",
-        description: "Hold any meme for 2 minutes for bonus cash!",
+        description: "HODL any meme for 2 minutes for a big reward!",
         type: 'challenge' as const,
         effect: "Complete for $1000 reward",
         reward: 1000,
         icon: "💎",
-        trigger: () => playerLevel >= 2 && Math.random() < 0.25
+        trigger: () => playerLevel >= 2 && Math.random() < 0.3
       },
       {
-        title: "🌟 Level Up Bonus",
-        description: "Congratulations on reaching a new level!",
+        title: "🌟 Level Up Celebration",
+        description: "Congratulations on leveling up, legend!",
         type: 'bonus' as const,
         effect: `Receive $${playerLevel * 500} level bonus`,
         reward: playerLevel * 500,
         icon: "⭐",
         trigger: () => playerLevel > 1 && Math.random() < 0.4
+      },
+      {
+        title: "📱 Social Media Surge",
+        description: "A viral TikTok is boosting animal memes!",
+        type: 'surge' as const,
+        effect: "Animal memes +20% for 4 minutes",
+        duration: 240000,
+        icon: "🦁",
+        trigger: () => Math.random() < 0.15
+      },
+      {
+        title: "🔥 Market Crash Alert!",
+        description: "PANIC! All memes are crashing hard!",
+        type: 'crash' as const,
+        effect: "All prices drop 15-30% for 2 minutes",
+        duration: 120000,
+        icon: "📉",
+        trigger: () => Math.random() < 0.1 && playerLevel >= 3
+      },
+      {
+        title: "🎪 Meme Festival",
+        description: "It's party time in the meme market!",
+        type: 'market_boost' as const,
+        effect: "Random memes get huge boosts",
+        duration: 300000,
+        icon: "🎊",
+        trigger: () => Math.random() < 0.18
+      },
+      {
+        title: "🌙 Late Night Trading",
+        description: "Night owls get special bonuses!",
+        type: 'bonus' as const,
+        effect: "Receive $750 night trader bonus",
+        reward: 750,
+        icon: "🌙",
+        trigger: () => new Date().getHours() >= 22 || new Date().getHours() <= 6
+      },
+      {
+        title: "🎯 Whale Alert",
+        description: "A crypto whale is buying everything!",
+        type: 'surge' as const,
+        effect: "All prices surge by 10-25%",
+        duration: 180000,
+        icon: "🐋",
+        trigger: () => Math.random() < 0.12
+      },
+      {
+        title: "🤡 Clown Market Mode",
+        description: "Nothing makes sense anymore!",
+        type: 'market_boost' as const,
+        effect: "Completely random price movements",
+        duration: 240000,
+        icon: "🤡",
+        trigger: () => Math.random() < 0.08
+      },
+      {
+        title: "🏆 Big Player Bonus",
+        description: "You're becoming a real meme mogul!",
+        type: 'bonus' as const,
+        effect: "Receive $2000 mogul bonus",
+        reward: 2000,
+        icon: "👑",
+        trigger: () => playerLevel >= 5 && Math.random() < 0.3
       }
     ];
 
@@ -121,13 +184,19 @@ const GameEvents = ({ playerCash, playerLevel, onEventAction }: GameEventsProps)
       {activeEvents.map((event) => (
         <Card
           key={event.id}
-          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-2xl animate-scale-in"
+          className={`${
+            event.type === 'crash' 
+              ? 'bg-gradient-to-r from-red-500 to-orange-600' 
+              : event.type === 'surge'
+              ? 'bg-gradient-to-r from-green-500 to-emerald-600'
+              : 'bg-gradient-to-r from-purple-500 to-pink-500'
+          } text-white shadow-2xl animate-scale-in border-4 border-yellow-300`}
         >
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg flex items-center gap-2">
-                <span className="text-2xl">{event.icon}</span>
-                Event Alert!
+                <span className="text-2xl animate-bounce">{event.icon}</span>
+                {event.type === 'crash' ? '🚨 ALERT!' : '🎪 Event!'}
               </CardTitle>
               <Button
                 variant="ghost"
@@ -140,23 +209,27 @@ const GameEvents = ({ playerCash, playerLevel, onEventAction }: GameEventsProps)
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div>
-              <h3 className="font-bold">{event.title}</h3>
-              <p className="text-sm text-purple-100">{event.description}</p>
+            <div className="bg-white/20 rounded-lg p-3 backdrop-blur-sm">
+              <h3 className="font-bold text-yellow-200">{event.title}</h3>
+              <p className="text-sm text-white/90">{event.description}</p>
             </div>
             
-            <Badge variant="secondary" className="bg-white/20 text-white">
-              {event.effect}
+            <Badge variant="secondary" className="bg-white/30 text-white border-white/50">
+              <span className="animate-pulse">⚡</span> {event.effect}
             </Badge>
 
             <div className="flex gap-2">
               <Button
                 onClick={() => handleEventAction(event.id, 'accept')}
                 size="sm"
-                className="bg-green-500 hover:bg-green-600 text-white flex-1"
+                className={`flex-1 font-bold ${
+                  event.type === 'crash'
+                    ? 'bg-orange-500 hover:bg-orange-600 text-white'
+                    : 'bg-green-500 hover:bg-green-600 text-white'
+                }`}
               >
                 <Gift className="w-3 h-3 mr-1" />
-                Accept
+                {event.type === 'crash' ? 'Brace!' : 'Let\'s Go!'}
               </Button>
               <Button
                 onClick={() => handleEventAction(event.id, 'dismiss')}
@@ -164,7 +237,7 @@ const GameEvents = ({ playerCash, playerLevel, onEventAction }: GameEventsProps)
                 variant="outline"
                 className="text-white border-white hover:bg-white/20"
               >
-                Later
+                Pass
               </Button>
             </div>
           </CardContent>
