@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,13 @@ import Portfolio from '@/components/Portfolio';
 import Leaderboard from '@/components/Leaderboard';
 import UpgradeShop from '@/components/UpgradeShop';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TrendingUp, Wallet, Trophy, ShoppingCart, Zap } from 'lucide-react';
+import { TrendingUp, Wallet, Trophy, ShoppingCart, Zap, Star, Award, Calendar } from 'lucide-react';
+import WelcomeScreen from '@/components/WelcomeScreen';
+import MarketNews from '@/components/MarketNews';
+import GameEvents from '@/components/GameEvents';
+import PlayerLevel from '@/components/PlayerLevel';
+import Achievements from '@/components/Achievements';
+import type { Achievement } from '@/components/Achievements';
 
 export interface Meme {
   id: string;
@@ -41,6 +46,10 @@ export interface Portfolio {
 }
 
 const Index = () => {
+  const [gameStarted, setGameStarted] = useState(false);
+  const [playerLevel, setPlayerLevel] = useState(1);
+  const [playerExperience, setPlayerExperience] = useState(0);
+  
   const [memes, setMemes] = useState<Meme[]>([
     {
       id: '1',
@@ -149,6 +158,88 @@ const Index = () => {
     }
   ]);
 
+  const [achievements, setAchievements] = useState<Achievement[]>([
+    {
+      id: '1',
+      name: 'First Trade',
+      description: 'Make your first meme investment',
+      icon: '🎯',
+      progress: 0,
+      target: 1,
+      completed: false,
+      reward: 100,
+      category: 'trading'
+    },
+    {
+      id: '2',
+      name: 'Portfolio Starter',
+      description: 'Reach $15,000 portfolio value',
+      icon: '💰',
+      progress: 10000,
+      target: 15000,
+      completed: false,
+      reward: 500,
+      category: 'wealth'
+    },
+    {
+      id: '3',
+      name: 'Meme Mogul',
+      description: 'Reach $50,000 portfolio value',
+      icon: '👑',
+      progress: 10000,
+      target: 50000,
+      completed: false,
+      reward: 2000,
+      category: 'wealth'
+    },
+    {
+      id: '4',
+      name: 'Upgrade Master',
+      description: 'Purchase 5 upgrades',
+      icon: '⚡',
+      progress: 0,
+      target: 5,
+      completed: false,
+      reward: 1000,
+      category: 'upgrades'
+    },
+    {
+      id: '5',
+      name: 'Diamond Hands',
+      description: 'Hold a meme for 5 minutes',
+      icon: '💎',
+      progress: 0,
+      target: 1,
+      completed: false,
+      reward: 750,
+      category: 'special'
+    },
+    {
+      id: '6',
+      name: 'Day Trader',
+      description: 'Complete 50 trades',
+      icon: '📊',
+      progress: 0,
+      target: 50,
+      completed: false,
+      reward: 1500,
+      category: 'trading'
+    }
+  ]);
+
+  const [totalTrades, setTotalTrades] = useState(0);
+
+  // Calculate player level and experience
+  const calculateLevel = (totalValue: number) => {
+    const baseValue = 10000;
+    const levelThreshold = 5000; // $5000 per level
+    const level = Math.floor((totalValue - baseValue) / levelThreshold) + 1;
+    const experience = (totalValue - baseValue) % levelThreshold;
+    const experienceToNext = levelThreshold;
+    
+    return { level: Math.max(1, level), experience, experienceToNext };
+  };
+
   // Simulate price updates
   useEffect(() => {
     const interval = setInterval(() => {
@@ -178,11 +269,44 @@ const Index = () => {
       return total + (meme ? meme.currentPrice * quantity : 0);
     }, 0);
 
+    const newTotalValue = portfolio.cash + holdingsValue;
+    
     setPortfolio(prev => ({
       ...prev,
-      totalValue: prev.cash + holdingsValue
+      totalValue: newTotalValue
     }));
-  }, [memes, portfolio.holdings, portfolio.cash]);
+
+    // Update player level
+    const { level, experience, experienceToNext } = calculateLevel(newTotalValue);
+    if (level > playerLevel) {
+      setPlayerLevel(level);
+      // Level up bonus event could be triggered here
+    }
+    setPlayerExperience(experience);
+
+    // Update achievements
+    setAchievements(prev => prev.map(achievement => {
+      let newProgress = achievement.progress;
+      
+      switch (achievement.id) {
+        case '2':
+        case '3':
+          newProgress = newTotalValue;
+          break;
+      }
+      
+      const completed = newProgress >= achievement.target && !achievement.completed;
+      if (completed) {
+        setPortfolio(p => ({ ...p, cash: p.cash + achievement.reward }));
+      }
+      
+      return {
+        ...achievement,
+        progress: newProgress,
+        completed: completed || achievement.completed
+      };
+    }));
+  }, [memes, portfolio.holdings, portfolio.cash, playerLevel]);
 
   const buyMeme = (memeId: string, amount: number) => {
     const meme = memes.find(m => m.id === memeId);
@@ -197,6 +321,33 @@ const Index = () => {
           ...prev.holdings,
           [memeId]: (prev.holdings[memeId] || 0) + amount
         }
+      }));
+      
+      setTotalTrades(prev => prev + 1);
+      
+      // Update achievements
+      setAchievements(prev => prev.map(achievement => {
+        let newProgress = achievement.progress;
+        
+        switch (achievement.id) {
+          case '1':
+            newProgress = 1;
+            break;
+          case '6':
+            newProgress = totalTrades + 1;
+            break;
+        }
+        
+        const completed = newProgress >= achievement.target && !achievement.completed;
+        if (completed) {
+          setPortfolio(p => ({ ...p, cash: p.cash + achievement.reward }));
+        }
+        
+        return {
+          ...achievement,
+          progress: newProgress,
+          completed: completed || achievement.completed
+        };
       }));
     }
   };
@@ -214,6 +365,25 @@ const Index = () => {
         [memeId]: prev.holdings[memeId] - amount
       }
     }));
+    
+    setTotalTrades(prev => prev + 1);
+    
+    // Update trade count achievement
+    setAchievements(prev => prev.map(achievement => {
+      if (achievement.id === '6') {
+        const newProgress = totalTrades + 1;
+        const completed = newProgress >= achievement.target && !achievement.completed;
+        if (completed) {
+          setPortfolio(p => ({ ...p, cash: p.cash + achievement.reward }));
+        }
+        return {
+          ...achievement,
+          progress: newProgress,
+          completed: completed || achievement.completed
+        };
+      }
+      return achievement;
+    }));
   };
 
   const buyUpgrade = (upgradeId: string) => {
@@ -228,10 +398,57 @@ const Index = () => {
           : u
       )
     );
+    
+    // Update upgrade achievement
+    setAchievements(prev => prev.map(achievement => {
+      if (achievement.id === '4') {
+        const totalUpgrades = upgrades.reduce((sum, u) => sum + u.level, 0) + 1;
+        const completed = totalUpgrades >= achievement.target && !achievement.completed;
+        if (completed) {
+          setPortfolio(p => ({ ...p, cash: p.cash + achievement.reward }));
+        }
+        return {
+          ...achievement,
+          progress: totalUpgrades,
+          completed: completed || achievement.completed
+        };
+      }
+      return achievement;
+    }));
   };
+
+  const handleEventAction = (eventId: string, action: 'accept' | 'dismiss') => {
+    if (action === 'accept') {
+      // Handle event rewards/effects here
+      console.log(`Event ${eventId} accepted`);
+      // You could add specific event handling logic here
+    }
+  };
+
+  const handleClaimAchievementReward = (achievementId: string) => {
+    // Rewards are automatically claimed when achievements are completed
+    console.log(`Achievement ${achievementId} reward claimed`);
+  };
+
+  const memeNames = memes.reduce((acc, meme) => {
+    acc[meme.id] = meme.name;
+    return acc;
+  }, {} as { [key: string]: string });
+
+  const { level, experience, experienceToNext } = calculateLevel(portfolio.totalValue);
+
+  if (!gameStarted) {
+    return <WelcomeScreen onStartGame={() => setGameStarted(true)} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50">
+      <GameEvents 
+        playerCash={portfolio.cash}
+        playerLevel={level}
+        onEventAction={handleEventAction}
+      />
+      
       <div className="container mx-auto px-4 py-6">
         {/* Header */}
         <div className="mb-8">
@@ -241,6 +458,16 @@ const Index = () => {
           <p className="text-lg text-gray-600 text-center">
             Invest in the hottest memes and build your fortune!
           </p>
+        </div>
+
+        {/* Player Level Card */}
+        <div className="mb-6">
+          <PlayerLevel 
+            level={level}
+            experience={experience}
+            experienceToNext={experienceToNext}
+            totalValue={portfolio.totalValue}
+          />
         </div>
 
         {/* Portfolio Summary */}
@@ -263,7 +490,7 @@ const Index = () => {
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="trading" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
+          <TabsList className="grid w-full grid-cols-6 mb-6">
             <TabsTrigger value="trading" className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4" />
               Trading
@@ -275,6 +502,14 @@ const Index = () => {
             <TabsTrigger value="upgrades" className="flex items-center gap-2">
               <ShoppingCart className="w-4 h-4" />
               Upgrades
+            </TabsTrigger>
+            <TabsTrigger value="achievements" className="flex items-center gap-2">
+              <Award className="w-4 h-4" />
+              Achievements
+            </TabsTrigger>
+            <TabsTrigger value="news" className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              News
             </TabsTrigger>
             <TabsTrigger value="leaderboard" className="flex items-center gap-2">
               <Trophy className="w-4 h-4" />
@@ -310,6 +545,17 @@ const Index = () => {
               playerCash={portfolio.cash}
               onBuyUpgrade={buyUpgrade}
             />
+          </TabsContent>
+
+          <TabsContent value="achievements">
+            <Achievements
+              achievements={achievements}
+              onClaimReward={handleClaimAchievementReward}
+            />
+          </TabsContent>
+
+          <TabsContent value="news">
+            <MarketNews memeNames={memeNames} />
           </TabsContent>
 
           <TabsContent value="leaderboard">
