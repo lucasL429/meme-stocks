@@ -5,18 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Volume2, VolumeX, Moon, Sun, Palette, Globe, Bell, Save, BookOpen } from 'lucide-react';
+import { Palette, Globe, Bell, Save, BookOpen } from 'lucide-react';
 
 export interface GameSettings {
   language: string;
   darkMode: boolean;
-  musicEnabled: boolean;
-  soundEffectsEnabled: boolean;
-  musicVolume: number;
-  sfxVolume: number;
   colorTheme: string;
   notifications: boolean;
   autoSave: boolean;
@@ -111,65 +105,6 @@ const Settings = ({ isOpen, onClose, settings, onSettingsChange, onShowTutorial 
             </CardContent>
           </Card>
 
-          {/* Audio Settings */}
-          <Card className="border-2 border-green-200">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Volume2 className="w-5 h-5 text-green-600" />
-                🔊 Audio Settings
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <Label className="flex items-center gap-2">
-                  🎵 Background Music
-                </Label>
-                <Switch
-                  checked={settings.musicEnabled}
-                  onCheckedChange={(checked) => updateSetting('musicEnabled', checked)}
-                />
-              </div>
-
-              {settings.musicEnabled && (
-                <div className="space-y-2">
-                  <Label className="text-sm">Music Volume: {settings.musicVolume}%</Label>
-                  <Slider
-                    value={[settings.musicVolume]}
-                    onValueChange={([value]) => updateSetting('musicVolume', value)}
-                    max={100}
-                    step={10}
-                    className="w-full"
-                  />
-                </div>
-              )}
-
-              <Separator />
-
-              <div className="flex items-center justify-between">
-                <Label className="flex items-center gap-2">
-                  🔊 Sound Effects
-                </Label>
-                <Switch
-                  checked={settings.soundEffectsEnabled}
-                  onCheckedChange={(checked) => updateSetting('soundEffectsEnabled', checked)}
-                />
-              </div>
-
-              {settings.soundEffectsEnabled && (
-                <div className="space-y-2">
-                  <Label className="text-sm">SFX Volume: {settings.sfxVolume}%</Label>
-                  <Slider
-                    value={[settings.sfxVolume]}
-                    onValueChange={([value]) => updateSetting('sfxVolume', value)}
-                    max={100}
-                    step={10}
-                    className="w-full"
-                  />
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
           {/* Appearance Settings */}
           <Card className="border-2 border-purple-200">
             <CardHeader>
@@ -181,7 +116,6 @@ const Settings = ({ isOpen, onClose, settings, onSettingsChange, onShowTutorial 
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label className="flex items-center gap-2">
-                  {settings.darkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
                   🌙 Dark Mode
                 </Label>
                 <Switch

@@ -60,10 +60,6 @@ const Index = () => {
   const [gameSettings, setGameSettings] = useState({
     language: 'en',
     darkMode: false,
-    musicEnabled: true,
-    soundEffectsEnabled: true,
-    musicVolume: 70,
-    sfxVolume: 80,
     colorTheme: 'rainbow',
     notifications: true,
     autoSave: true
@@ -423,11 +419,6 @@ const Index = () => {
 
     const cost = meme.currentPrice * amount;
     if (portfolio.cash >= cost) {
-      // Play buy sound
-      if ((window as any).playGameSound) {
-        (window as any).playGameSound('buy', 0.6);
-      }
-      
       setPortfolio(prev => ({
         ...prev,
         cash: prev.cash - cost,
@@ -455,9 +446,6 @@ const Index = () => {
         const completed = newProgress >= achievement.target && !achievement.completed;
         if (completed) {
           setPortfolio(p => ({ ...p, cash: p.cash + achievement.reward }));
-          if ((window as any).playGameSound) {
-            (window as any).playGameSound('achievement', 0.8);
-          }
         }
         
         return {
@@ -466,22 +454,12 @@ const Index = () => {
           completed: completed || achievement.completed
         };
       }));
-    } else {
-      // Play error sound for insufficient funds
-      if ((window as any).playGameSound) {
-        (window as any).playGameSound('error', 0.4);
-      }
     }
   };
 
   const sellMeme = (memeId: string, amount: number) => {
     const meme = memes.find(m => m.id === memeId);
     if (!meme || !portfolio.holdings[memeId] || portfolio.holdings[memeId] < amount) return;
-
-    // Play sell sound
-    if ((window as any).playGameSound) {
-      (window as any).playGameSound('sell', 0.6);
-    }
 
     const revenue = meme.currentPrice * amount;
     setPortfolio(prev => ({
@@ -502,9 +480,6 @@ const Index = () => {
         const completed = newProgress >= achievement.target && !achievement.completed;
         if (completed) {
           setPortfolio(p => ({ ...p, cash: p.cash + achievement.reward }));
-          if ((window as any).playGameSound) {
-            (window as any).playGameSound('achievement', 0.8);
-          }
         }
         return {
           ...achievement,
@@ -519,15 +494,7 @@ const Index = () => {
   const buyUpgrade = (upgradeId: string) => {
     const upgrade = upgrades.find(u => u.id === upgradeId);
     if (!upgrade || upgrade.level >= upgrade.maxLevel || portfolio.cash < upgrade.cost) {
-      if ((window as any).playGameSound) {
-        (window as any).playGameSound('error', 0.4);
-      }
       return;
-    }
-
-    // Play upgrade sound
-    if ((window as any).playGameSound) {
-      (window as any).playGameSound('upgrade', 0.7);
     }
 
     setPortfolio(prev => ({ ...prev, cash: prev.cash - upgrade.cost }));
@@ -546,9 +513,6 @@ const Index = () => {
         const completed = totalUpgrades >= achievement.target && !achievement.completed;
         if (completed) {
           setPortfolio(p => ({ ...p, cash: p.cash + achievement.reward }));
-          if ((window as any).playGameSound) {
-            (window as any).playGameSound('achievement', 0.8);
-          }
         }
         return {
           ...achievement,
@@ -562,16 +526,11 @@ const Index = () => {
 
   const handleEventAction = (eventId: string, action: 'accept' | 'dismiss') => {
     if (action === 'accept') {
-      // Play notification sound
-      if ((window as any).playGameSound) {
-        (window as any).playGameSound('notification', 0.5);
-      }
       console.log(`Event ${eventId} accepted`);
     }
   };
 
   const handleClaimAchievementReward = (achievementId: string) => {
-    // Rewards are automatically claimed when achievements are completed
     console.log(`Achievement ${achievementId} reward claimed`);
   };
 
