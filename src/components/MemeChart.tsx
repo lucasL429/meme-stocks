@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Meme } from '@/pages/Index';
 
 interface MemeChartProps {
@@ -17,10 +17,10 @@ const MemeChart = ({ meme }: MemeChartProps) => {
     if (timeAgo === 0) {
       timeLabel = 'Now';
     } else if (timeAgo < 60) {
-      timeLabel = `${timeAgo}m ago`;
+      timeLabel = `${timeAgo}m`;
     } else {
       const hours = Math.floor(timeAgo / 60);
-      timeLabel = `${hours}h ago`;
+      timeLabel = `${hours}h`;
     }
     
     return {
@@ -42,42 +42,52 @@ const MemeChart = ({ meme }: MemeChartProps) => {
   };
 
   return (
-    <div className="w-full h-full min-h-[200px]">
+    <div className="w-full h-48">
       <ChartContainer config={chartConfig} className="w-full h-full">
-        <LineChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 30 }}>
-          <XAxis 
-            dataKey="time"
-            axisLine={false}
-            tickLine={false}
-            tick={{ fontSize: 10, fill: '#6b7280' }}
-            interval="preserveStartEnd"
-          />
-          <YAxis 
-            axisLine={false}
-            tickLine={false}
-            tick={{ fontSize: 10, fill: '#6b7280' }}
-            tickFormatter={(value) => `$${value.toFixed(3)}`}
-            domain={['dataMin - dataMin * 0.02', 'dataMax + dataMax * 0.02']}
-          />
-          <ChartTooltip 
-            content={<ChartTooltipContent />}
-            formatter={(value: number) => [`$${value.toFixed(4)}`, 'Price']}
-            labelFormatter={(label) => `Time: ${label}`}
-          />
-          <Line
-            type="monotone"
-            dataKey="price"
-            stroke={lineColor}
-            strokeWidth={3}
-            dot={false}
-            activeDot={{ 
-              r: 5, 
-              fill: lineColor,
-              strokeWidth: 2,
-              stroke: '#fff'
-            }}
-          />
-        </LineChart>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart 
+            data={chartData} 
+            margin={{ top: 5, right: 5, left: 5, bottom: 20 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis 
+              dataKey="time"
+              axisLine={true}
+              tickLine={true}
+              tick={{ fontSize: 10, fill: '#6b7280' }}
+              interval="preserveStartEnd"
+              height={20}
+              label={{ value: 'Time', position: 'insideBottom', offset: -5, style: { textAnchor: 'middle', fontSize: '10px' } }}
+            />
+            <YAxis 
+              axisLine={true}
+              tickLine={true}
+              tick={{ fontSize: 10, fill: '#6b7280' }}
+              tickFormatter={(value) => `$${value.toFixed(2)}`}
+              domain={['dataMin - dataMin * 0.02', 'dataMax + dataMax * 0.02']}
+              width={40}
+              label={{ value: 'Price ($)', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fontSize: '10px' } }}
+            />
+            <ChartTooltip 
+              content={<ChartTooltipContent />}
+              formatter={(value: number) => [`$${value.toFixed(4)}`, 'Price']}
+              labelFormatter={(label) => `Time: ${label}`}
+            />
+            <Line
+              type="monotone"
+              dataKey="price"
+              stroke={lineColor}
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ 
+                r: 3, 
+                fill: lineColor,
+                strokeWidth: 1,
+                stroke: '#fff'
+              }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </ChartContainer>
     </div>
   );
