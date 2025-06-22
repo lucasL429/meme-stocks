@@ -524,9 +524,72 @@ const Index = () => {
     }));
   };
 
-  const handleEventAction = (eventId: string, action: 'accept' | 'dismiss') => {
+  const handleEventAction = (eventId: string, action: 'accept' | 'dismiss', eventType?: string) => {
     if (action === 'accept') {
-      console.log(`Event ${eventId} accepted`);
+      console.log(`Event ${eventId} accepted with type: ${eventType}`);
+      
+      // Handle different event types
+      switch (eventType) {
+        case 'market_crash':
+          // Apply market crash effects
+          setMemes(prevMemes => 
+            prevMemes.map(meme => ({
+              ...meme,
+              currentPrice: meme.currentPrice * (0.1 + Math.random() * 0.2), // 70-90% crash
+              change24h: -70 - Math.random() * 20
+            }))
+          );
+          break;
+          
+        case 'market_boost':
+          // Apply market boost effects
+          setMemes(prevMemes => 
+            prevMemes.map(meme => ({
+              ...meme,
+              currentPrice: meme.currentPrice * (1.5 + Math.random() * 1.0), // 50-150% boost
+              change24h: 50 + Math.random() * 100
+            }))
+          );
+          break;
+          
+        case 'surge':
+          // Random meme gets massive boost
+          const randomMemeIndex = Math.floor(Math.random() * memes.length);
+          setMemes(prevMemes => 
+            prevMemes.map((meme, index) => 
+              index === randomMemeIndex 
+                ? {
+                    ...meme,
+                    currentPrice: meme.currentPrice * (3 + Math.random() * 2), // 300-500% boost
+                    change24h: 300 + Math.random() * 200
+                  }
+                : meme
+            )
+          );
+          break;
+          
+        case 'chaos':
+          // Extreme random volatility
+          setMemes(prevMemes => 
+            prevMemes.map(meme => {
+              const volatility = (Math.random() - 0.5) * 4; // ±200% change
+              return {
+                ...meme,
+                currentPrice: Math.max(0.01, meme.currentPrice * (1 + volatility)),
+                change24h: volatility * 100
+              };
+            })
+          );
+          break;
+          
+        case 'bonus':
+          // Give player bonus cash
+          setPortfolio(prev => ({ ...prev, cash: prev.cash + 2000 }));
+          break;
+          
+        default:
+          console.log('Unknown event type:', eventType);
+      }
     }
   };
 
@@ -694,7 +757,7 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="news">
-            <MarketNews memeNames={memeNames} />
+            <MarketNews memeNames={memeNames} memes={memes} />
           </TabsContent>
 
           <TabsContent value="leaderboard">
