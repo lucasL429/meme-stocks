@@ -2,7 +2,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Trophy, Medal, Award, Crown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Trophy, Medal, Award, Crown, Users, Wifi, WifiOff } from 'lucide-react';
 import { Portfolio } from '@/pages/Index';
 
 interface LeaderboardProps {
@@ -10,18 +11,18 @@ interface LeaderboardProps {
 }
 
 const Leaderboard = ({ currentPlayer }: LeaderboardProps) => {
-  // Mock leaderboard data - in a real app this would come from a backend
+  // Mock leaderboard data - in a real app this would come from Supabase
   const leaderboardData = [
-    { rank: 1, name: "MemeKing420", value: 45670.23, avatar: "👑" },
-    { rank: 2, name: "StonksGuru", value: 38492.15, avatar: "🚀" },
-    { rank: 3, name: "DogeWhisperer", value: 35821.67, avatar: "🐕" },
-    { rank: 4, name: "PepeTrader", value: 29384.44, avatar: "🐸" },
-    { rank: 5, name: "DiamondHands", value: 25671.88, avatar: "💎" },
-    { rank: 6, name: "You", value: currentPlayer.totalValue, avatar: "😎" },
-    { rank: 7, name: "MemeLord88", value: 18492.33, avatar: "🔥" },
-    { rank: 8, name: "ShibaArmy", value: 16741.22, avatar: "🐶" },
-    { rank: 9, name: "CryptoNoob", value: 14523.77, avatar: "🤓" },
-    { rank: 10, name: "HODLer4Life", value: 12890.45, avatar: "💪" },
+    { rank: 1, name: "CryptoKing2024", value: 85670.23, avatar: "👑", isOnline: true },
+    { rank: 2, name: "MemeQueen", value: 72492.15, avatar: "👸", isOnline: true },
+    { rank: 3, name: "SigmaTrader", value: 68821.67, avatar: "🗿", isOnline: false },
+    { rank: 4, name: "RizzMaster", value: 59384.44, avatar: "😎", isOnline: true },
+    { rank: 5, name: "SkibidiLord", value: 45671.88, avatar: "🚽", isOnline: true },
+    { rank: 6, name: "You", value: currentPlayer.totalValue, avatar: "🎮", isOnline: true },
+    { rank: 7, name: "OhioVibes", value: 28492.33, avatar: "🌽", isOnline: false },
+    { rank: 8, name: "GyattGamer", value: 26741.22, avatar: "🍑", isOnline: true },
+    { rank: 9, name: "FanumTaxer", value: 24523.77, avatar: "🍟", isOnline: false },
+    { rank: 10, name: "NPCStreamer", value: 22890.45, avatar: "🤖", isOnline: true },
   ].sort((a, b) => b.value - a.value).map((player, index) => ({ ...player, rank: index + 1 }));
 
   const getRankIcon = (rank: number) => {
@@ -47,18 +48,30 @@ const Leaderboard = ({ currentPlayer }: LeaderboardProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header with Connection Status */}
       <Card className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <Trophy className="w-6 h-6" />
             Global Leaderboard
+            <div className="ml-auto flex items-center gap-2">
+              <WifiOff className="w-5 h-5 text-red-200" />
+              <span className="text-sm">Offline Mode</span>
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-yellow-100">
-            Compete with traders worldwide! Rankings update in real-time based on portfolio value.
-          </p>
+          <div className="space-y-3">
+            <p className="text-yellow-100">
+              📡 Connect to see real-time rankings with other players worldwide!
+            </p>
+            <Button 
+              className="bg-white/20 hover:bg-white/30 text-white border-2 border-white/50"
+              onClick={() => alert('Connect to Supabase to enable live leaderboard functionality!')}
+            >
+              🔗 Connect for Live Rankings
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
@@ -73,7 +86,7 @@ const Leaderboard = ({ currentPlayer }: LeaderboardProps) => {
               <div className="text-3xl font-bold text-blue-800">
                 #{leaderboardData.find(p => p.name === "You")?.rank || 'N/A'}
               </div>
-              <div className="text-blue-600">Global Rank</div>
+              <div className="text-blue-600">Current Rank</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-green-600">
@@ -94,7 +107,10 @@ const Leaderboard = ({ currentPlayer }: LeaderboardProps) => {
       {/* Leaderboard */}
       <Card>
         <CardHeader>
-          <CardTitle>Top Traders</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="w-5 h-5" />
+            Top Traders (Demo Mode)
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -114,6 +130,13 @@ const Leaderboard = ({ currentPlayer }: LeaderboardProps) => {
                   <div className="flex items-center gap-2">
                     {getRankIcon(player.rank)}
                     <span className="text-2xl">{player.avatar}</span>
+                    <div className="flex items-center gap-1">
+                      {player.isOnline ? (
+                        <Wifi className="w-3 h-3 text-green-500" />
+                      ) : (
+                        <WifiOff className="w-3 h-3 text-gray-400" />
+                      )}
+                    </div>
                   </div>
                   <div>
                     <div className={`font-semibold ${player.name === "You" ? 'text-blue-800' : 'text-gray-800'}`}>
@@ -123,7 +146,7 @@ const Leaderboard = ({ currentPlayer }: LeaderboardProps) => {
                       )}
                     </div>
                     <div className="text-sm text-gray-500">
-                      Portfolio Value
+                      {player.isOnline ? '🟢 Online' : '🔴 Offline'}
                     </div>
                   </div>
                 </div>
@@ -144,7 +167,7 @@ const Leaderboard = ({ currentPlayer }: LeaderboardProps) => {
       {/* Achievement Badges */}
       <Card className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white">
         <CardHeader>
-          <CardTitle>🏆 Achievements</CardTitle>
+          <CardTitle>🏆 Recent Achievements</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

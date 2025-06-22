@@ -32,10 +32,49 @@ interface SettingsProps {
 
 const Settings = ({ isOpen, onClose, settings, onSettingsChange, onShowTutorial }: SettingsProps) => {
   const updateSetting = (key: keyof GameSettings, value: any) => {
-    onSettingsChange({
+    const newSettings = {
       ...settings,
       [key]: value
-    });
+    };
+    onSettingsChange(newSettings);
+    
+    // Apply settings immediately
+    if (key === 'darkMode') {
+      document.documentElement.classList.toggle('dark', value);
+    }
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('memeStocksSettings', JSON.stringify(newSettings));
+  };
+
+  const getLanguageText = (key: string) => {
+    const translations: { [key: string]: { [lang: string]: string } } = {
+      'settings': {
+        'en': '⚙️ Game Settings',
+        'es': '⚙️ Configuración del Juego',
+        'fr': '⚙️ Paramètres du Jeu',
+        'de': '⚙️ Spieleinstellungen',
+        'pt': '⚙️ Configurações do Jogo',
+        'ja': '⚙️ ゲーム設定'
+      },
+      'tutorial': {
+        'en': '🎓 Open Tutorial - Learn How to Play!',
+        'es': '🎓 Abrir Tutorial - ¡Aprende a Jugar!',
+        'fr': '🎓 Ouvrir le Tutoriel - Apprenez à Jouer!',
+        'de': '🎓 Tutorial Öffnen - Lerne zu Spielen!',
+        'pt': '🎓 Abrir Tutorial - Aprenda a Jogar!',
+        'ja': '🎓 チュートリアルを開く - プレイ方法を学ぶ！'
+      },
+      'saveClose': {
+        'en': '✅ Save & Close',
+        'es': '✅ Guardar y Cerrar',
+        'fr': '✅ Sauvegarder et Fermer',
+        'de': '✅ Speichern und Schließen',
+        'pt': '✅ Salvar e Fechar',
+        'ja': '✅ 保存して閉じる'
+      }
+    };
+    return translations[key]?.[settings.language] || translations[key]?.['en'] || key;
   };
 
   return (
@@ -43,7 +82,7 @@ const Settings = ({ isOpen, onClose, settings, onSettingsChange, onShowTutorial 
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
-            ⚙️ Game Settings
+            {getLanguageText('settings')}
           </DialogTitle>
         </DialogHeader>
 
@@ -64,7 +103,7 @@ const Settings = ({ isOpen, onClose, settings, onSettingsChange, onShowTutorial 
                 }}
                 className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold"
               >
-                🎓 Open Tutorial - Learn How to Play!
+                {getLanguageText('tutorial')}
               </Button>
               <p className="text-sm text-gray-600 mt-2 text-center">
                 Review the basics of meme trading and investment strategies
@@ -249,7 +288,7 @@ const Settings = ({ isOpen, onClose, settings, onSettingsChange, onShowTutorial 
               onClick={onClose}
               className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold px-8 py-2"
             >
-              ✅ Save & Close
+              {getLanguageText('saveClose')}
             </Button>
           </div>
         </div>

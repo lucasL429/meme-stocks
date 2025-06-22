@@ -70,161 +70,150 @@ const Index = () => {
   });
 
   const [memes, setMemes] = useState<Meme[]>([
-    // Sports Memes (from TikTok data)
+    // Updated with more relevant TikTok trends
     {
       id: '1',
-      name: 'TikTok Sports',
-      symbol: 'SPORT',
-      currentPrice: 8.78,
-      priceHistory: [7.20, 7.65, 8.10, 8.78, 8.45, 8.78],
-      change24h: 21.9,
-      marketCap: 450000000,
-      emoji: '⚽',
+      name: 'Skibidi Toilet',
+      symbol: 'SKBT',
+      currentPrice: 12.45,
+      priceHistory: [8.20, 9.65, 11.10, 12.45, 11.85, 12.45],
+      change24h: 51.8,
+      marketCap: 890000000,
+      emoji: '🚽',
       color: '#10B981',
-      category: 'Sports'
+      category: 'Viral Comedy'
     },
-    // Relationship/Lifestyle Memes
     {
       id: '2',
-      name: 'Wedding Ice Bow',
-      symbol: 'WEDDING',
-      currentPrice: 20.74,
-      priceHistory: [18.50, 19.25, 20.10, 20.74, 20.30, 20.74],
-      change24h: 12.1,
-      marketCap: 620000000,
-      emoji: '💒',
+      name: 'Ohio Sigma',
+      symbol: 'OHIO',
+      currentPrice: 24.67,
+      priceHistory: [18.50, 20.25, 22.10, 24.67, 23.30, 24.67],
+      change24h: 33.3,
+      marketCap: 1200000000,
+      emoji: '🗿',
       color: '#EC4899',
-      category: 'Relationship/Lifestyle'
+      category: 'Gen Z Culture'
     },
-    // Trending/Generic Memes
     {
       id: '3',
-      name: 'Extrañare Sus Recuerdos',
-      symbol: 'EXTRA',
-      currentPrice: 19.59,
-      priceHistory: [16.80, 17.95, 18.65, 19.59, 19.15, 19.59],
-      change24h: 16.6,
-      marketCap: 580000000,
-      emoji: '😢',
+      name: 'Rizz Level',
+      symbol: 'RIZZ',
+      currentPrice: 35.89,
+      priceHistory: [28.80, 31.95, 33.65, 35.89, 34.15, 35.89],
+      change24h: 24.6,
+      marketCap: 1580000000,
+      emoji: '😎',
       color: '#8B5CF6',
-      category: 'Trending/Generic'
+      category: 'Dating/Relationship'
     },
-    // Comedy Memes
     {
       id: '4',
-      name: 'Fyp Fun',
-      symbol: 'FYP',
-      currentPrice: 52.5,
-      priceHistory: [45.20, 48.15, 50.35, 52.5, 51.80, 52.5],
-      change24h: 16.2,
-      marketCap: 1200000000,
-      emoji: '😂',
+      name: 'Gyatt Moment',
+      symbol: 'GYAT',
+      currentPrice: 18.23,
+      priceHistory: [14.20, 15.85, 17.35, 18.23, 17.80, 18.23],
+      change24h: 28.4,
+      marketCap: 750000000,
+      emoji: '🍑',
       color: '#F59E0B',
-      category: 'Comedy'
+      category: 'Viral Slang'
     },
-    // More Relationship/Lifestyle
     {
       id: '5',
-      name: 'Cool Guys Vibes',
-      symbol: 'COOL',
-      currentPrice: 93.0,
-      priceHistory: [78.50, 84.25, 89.10, 93.0, 91.45, 93.0],
-      change24h: 18.5,
-      marketCap: 2100000000,
-      emoji: '😎',
+      name: 'Fanum Tax',
+      symbol: 'FNTX',
+      currentPrice: 45.12,
+      priceHistory: [35.50, 39.25, 42.10, 45.12, 43.45, 45.12],
+      change24h: 27.1,
+      marketCap: 1890000000,
+      emoji: '🍟',
       color: '#06B6D4',
-      category: 'Relationship/Lifestyle'
+      category: 'Food Trends'
     },
-    // Trending Love Memes
     {
       id: '6',
-      name: 'Love You Puppy',
-      symbol: 'LOVE',
-      currentPrice: 190.0,
-      priceHistory: [165.30, 175.80, 185.20, 190.0, 187.90, 190.0],
-      change24h: 14.9,
-      marketCap: 4200000000,
-      emoji: '💕',
+      name: 'NPC Stream',
+      symbol: 'NPC',
+      currentPrice: 67.45,
+      priceHistory: [52.30, 58.80, 63.20, 67.45, 65.90, 67.45],
+      change24h: 29.0,
+      marketCap: 2400000000,
+      emoji: '🤖',
       color: '#F97316',
-      category: 'Trending/Generic'
+      category: 'Live Streaming'
     },
-    // Animal/Pet Content
     {
       id: '7',
-      name: 'Cute Cat Dude',
-      symbol: 'CAT',
-      currentPrice: 270.0,
-      priceHistory: [235.60, 248.90, 262.15, 270.0, 266.80, 270.0],
-      change24h: 14.6,
-      marketCap: 5800000000,
-      emoji: '🐱',
+      name: 'Sigma Grindset',
+      symbol: 'SGMA',
+      currentPrice: 89.67,
+      priceHistory: [68.60, 75.90, 82.15, 89.67, 86.80, 89.67],
+      change24h: 30.7,
+      marketCap: 3200000000,
+      emoji: '💪',
       color: '#EF4444',
-      category: 'Animal Memes'
+      category: 'Motivation'
     },
-    // Flowers/Nature Trending
     {
       id: '8',
-      name: 'Flowers Trend',
-      symbol: 'FLOWER',
-      currentPrice: 220.0,
-      priceHistory: [190.80, 202.50, 215.30, 220.0, 217.40, 220.0],
-      change24h: 15.3,
-      marketCap: 4900000000,
-      emoji: '🌸',
+      name: 'Grimace Shake',
+      symbol: 'GRMC',
+      currentPrice: 34.89,
+      priceHistory: [26.80, 29.50, 32.30, 34.89, 33.40, 34.89],
+      change24h: 30.1,
+      marketCap: 1450000000,
+      emoji: '🟣',
       color: '#DC2626',
-      category: 'Trending/Generic'
+      category: 'Food Trends'
     },
-    // Animal Content Continued
     {
       id: '9',
-      name: 'Animal Planet',
-      symbol: 'ANIMAL',
-      currentPrice: 410.0,
-      priceHistory: [358.70, 378.45, 395.80, 410.0, 404.20, 410.0],
-      change24h: 14.3,
-      marketCap: 8500000000,
-      emoji: '🦁',
+      name: 'Smurf Cat',
+      symbol: 'SMRF',
+      currentPrice: 56.78,
+      priceHistory: [42.70, 47.45, 52.80, 56.78, 54.20, 56.78],
+      change24h: 33.0,
+      marketCap: 2100000000,
+      emoji: '😺',
       color: '#7C3AED',
       category: 'Animal Memes'
     },
-    // TikTok Boys Trending
     {
       id: '10',
-      name: 'TikTok Boys',
-      symbol: 'BOYS',
-      currentPrice: 1370.0,
-      priceHistory: [1180.50, 1265.30, 1320.40, 1370.0, 1348.70, 1370.0],
-      change24h: 16.1,
-      marketCap: 12000000000,
-      emoji: '👦',
+      name: 'Bing Chilling',
+      symbol: 'BING',
+      currentPrice: 78.90,
+      priceHistory: [58.50, 65.30, 72.40, 78.90, 75.70, 78.90],
+      change24h: 34.9,
+      marketCap: 2800000000,
+      emoji: '🍦',
       color: '#059669',
-      category: 'Trending/Generic'
+      category: 'International'
     },
-    // Sports Content
     {
       id: '11',
-      name: 'Sports Highlights',
-      symbol: 'HIGHLIGHTS',
-      currentPrice: 170.0,
-      priceHistory: [148.90, 157.30, 164.85, 170.0, 167.55, 170.0],
-      change24h: 14.2,
-      marketCap: 3800000000,
-      emoji: '🏆',
+      name: 'Alpha Male',
+      symbol: 'ALFA',
+      currentPrice: 125.45,
+      priceHistory: [89.90, 102.30, 115.85, 125.45, 120.55, 125.45],
+      change24h: 39.5,
+      marketCap: 4200000000,
+      emoji: '🦁',
       color: '#0891B2',
-      category: 'Sports'
+      category: 'Lifestyle'
     },
-    // Viral Content
     {
       id: '12',
-      name: 'Viral Video',
-      symbol: 'VIRAL',
-      currentPrice: 70.0,
-      priceHistory: [61.25, 65.40, 68.15, 70.0, 69.30, 70.0],
-      change24h: 14.3,
-      marketCap: 1600000000,
-      emoji: '🔥',
+      name: 'Based Take',
+      symbol: 'BASD',
+      currentPrice: 92.34,
+      priceHistory: [68.25, 76.40, 84.15, 92.34, 88.30, 92.34],
+      change24h: 35.3,
+      marketCap: 3400000000,
+      emoji: '🧠',
       color: '#BE185D',
-      category: 'Trending/Generic'
+      category: 'Opinion/Commentary'
     }
   ]);
 
@@ -600,7 +589,7 @@ const Index = () => {
   const backgroundClass = gameSettings.darkMode 
     ? "min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-800"
     : gameSettings.colorTheme === 'rainbow'
-    ? "min-h-screen bg-gradient-to-br from-pink-300 via-purple-300 via-blue-300 via-green-300 via-yellow-300 to-red-300 animate-pulse"
+    ? "min-h-screen bg-gradient-to-br from-pink-300 via-purple-300 via-blue-300 via-green-300 via-yellow-300 to-red-300"
     : gameSettings.colorTheme === 'neon'
     ? "min-h-screen bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500"
     : gameSettings.colorTheme === 'pastel'
@@ -643,7 +632,7 @@ const Index = () => {
             ⚙️ Settings
           </Button>
           
-          <h1 className="text-4xl font-bold text-white mb-2 text-center animate-bounce drop-shadow-2xl">
+          <h1 className="text-4xl font-bold text-white mb-2 text-center drop-shadow-2xl">
             🚀 MemeStocks Exchange 🎮
           </h1>
           <p className="text-lg text-white text-center font-bold drop-shadow-lg">
