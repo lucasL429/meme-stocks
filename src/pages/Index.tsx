@@ -56,13 +56,15 @@ const Index = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
 
-  // Game settings state
+  // Game settings state - updated to include audio settings
   const [gameSettings, setGameSettings] = useState({
     language: 'en',
     darkMode: false,
     colorTheme: 'rainbow',
     notifications: true,
-    autoSave: true
+    autoSave: true,
+    volume: 50,
+    muted: false
   });
 
   const [memes, setMemes] = useState<Meme[]>([
@@ -412,6 +414,21 @@ const Index = () => {
       };
     }));
   }, [memes, portfolio.holdings, portfolio.cash, playerLevel]);
+
+  // Load settings from localStorage on component mount
+  useEffect(() => {
+    const savedSettings = localStorage.getItem('memeStocksSettings');
+    if (savedSettings) {
+      const parsedSettings = JSON.parse(savedSettings);
+      setGameSettings(parsedSettings);
+      
+      // Apply dark mode on load
+      if (parsedSettings.darkMode) {
+        document.documentElement.classList.add('dark');
+        document.body.style.backgroundColor = '#1f2937';
+      }
+    }
+  }, []);
 
   const buyMeme = (memeId: string, amount: number) => {
     const meme = memes.find(m => m.id === memeId);

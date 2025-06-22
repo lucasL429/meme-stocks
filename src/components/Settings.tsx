@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Palette, Globe, Bell, Save, BookOpen } from 'lucide-react';
+import { Palette, Globe, Bell, Save, BookOpen, Volume2, VolumeX, Moon, Sun } from 'lucide-react';
 
 export interface GameSettings {
   language: string;
@@ -14,6 +15,8 @@ export interface GameSettings {
   colorTheme: string;
   notifications: boolean;
   autoSave: boolean;
+  volume: number;
+  muted: boolean;
 }
 
 interface SettingsProps {
@@ -35,6 +38,11 @@ const Settings = ({ isOpen, onClose, settings, onSettingsChange, onShowTutorial 
     // Apply settings immediately
     if (key === 'darkMode') {
       document.documentElement.classList.toggle('dark', value);
+      if (value) {
+        document.body.style.backgroundColor = '#1f2937';
+      } else {
+        document.body.style.backgroundColor = '';
+      }
     }
     
     // Save to localStorage for persistence
@@ -105,6 +113,44 @@ const Settings = ({ isOpen, onClose, settings, onSettingsChange, onShowTutorial 
             </CardContent>
           </Card>
 
+          {/* Audio Settings */}
+          <Card className="border-2 border-green-200">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Volume2 className="w-5 h-5 text-green-600" />
+                🎵 Audio Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="flex items-center gap-2">
+                  {settings.muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                  🔇 Mute Audio
+                </Label>
+                <Switch
+                  checked={settings.muted}
+                  onCheckedChange={(checked) => updateSetting('muted', checked)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2">
+                  <Volume2 className="w-4 h-4" />
+                  🔊 Volume: {settings.volume}%
+                </Label>
+                <Slider
+                  value={[settings.volume]}
+                  onValueChange={(value) => updateSetting('volume', value[0])}
+                  max={100}
+                  min={0}
+                  step={5}
+                  disabled={settings.muted}
+                  className="w-full"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Appearance Settings */}
           <Card className="border-2 border-purple-200">
             <CardHeader>
@@ -116,7 +162,8 @@ const Settings = ({ isOpen, onClose, settings, onSettingsChange, onShowTutorial 
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label className="flex items-center gap-2">
-                  🌙 Dark Mode
+                  {settings.darkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+                  {settings.darkMode ? '🌙 Dark Mode' : '☀️ Light Mode'}
                 </Label>
                 <Switch
                   checked={settings.darkMode}
